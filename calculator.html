@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.containor{
+     width: 350px;
+    margin: 24px auto;
+    background-color: #959497;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 1px 12px black;
+}
+
+.title{
+      display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 18px;
+    margin-bottom: 24px;
+}
+.inputToContainor{
+     width: 100%;
+    height: 64px;
+    background-color: rgb(44, 3, 249);
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.inputToContainor label{
+     display: block;
+    text-align: right;
+    font-weight: bold;
+    color:white;
+}
+
+.inputToContainor input{
+    display: block;
+    width: 100%;
+    height: 38px;
+    border: none;
+    text-align: end;
+    outline: none;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.inputToContainor input:focus{
+     border: none;
+   outline: none;
+   box-shadow: none;
+}
+
+ hr{
+    height: 1px;
+    background-color: rgb(201, 201, 201, 1);
+    margin: 24px 0;
+    border: 6px;
+}
+
+.mainContainor{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.main{
+     display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.equal{
+    grid-column: span 2;
+}
+
+.button{
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.utility{
+    background-color: rgb(44, 3, 249);
+}
+
+.operator{
+    background-color: black;
+    color:white;
+}
+
+.number{
+    background-color: rgb(86, 84, 96);
+    color: white;
+}
+
+.equal{
+    background-color:red;
+    color:white;
+}
+    </style>
+
+</head>
+<body>
+    <div class="containor">
+        <div class="title">
+            <h3>Standard</h3>
+            <h2>JO</h2>
+        </div>
+        <div class="inputToContainor">
+            <label>counts</label>
+             <input type="text" id="display" class="display" value="0" readonly/>
+        </div>
+        <hr/>
+        <div class="mainContainor">
+            <div class="main">
+            <button onclick="clearDisplay()" class="utility">AC</button>
+            <button onclick="toggleSign()" class="utility">+\-</button>
+            <button onclick="percentage()" class="utility">%</button>
+            <button onclick="selectOperator('/')" class="operator">/</button>
+        </div>
+        <div class="main">
+            <button onclick="appendNum('7')" class="number">7</button>
+            <button onclick="appendNum('8')" class="number">8</button>
+            <button onclick="appendNum('9')" class="number">9</button>
+            <button onclick="selectOperator('*')" class="operator">x</button>
+        </div>
+        <div class="main">
+            <button onclick="appendNum('6')" class="number">6</button>
+            <button onclick="appendNum('5')" class="number">5</button>
+            <button onclick="appendNum('4')" class="number">4</button>
+            <button onclick="selectOperator('-')" class="operator">-</button>
+        </div>
+        <div class="main">
+            <button onclick="appendNum('3')" class="number">3</button>
+            <button onclick="appendNum('2')" class="number">2</button>
+            <button onclick="appendNum('1')" class="number">1</button>
+            <button onclick="selectOperator('+')" class="operator">+</button>
+        </div>
+        <div class="main">
+            <button onclick="appendNum('0')" class="number">0</button>
+            <button onclick="appendNum('.')" class="number">.</button>
+            <button onclick="calculate()" class="equal">=</button>
+        </div>
+        </div>
+    </div>
+</body>
+<script>
+    let result = document.getElementById('display');
+let current = "";
+let previous = "";
+let operator = "";
+
+function appendNum(number){
+    current += number;
+    result.value += current;
+}
+
+function selectOperator(op){
+    previous = current;
+    current = "";
+    operator = op;
+    result.value += op;
+}
+
+function calculate(){
+    a = parseFloat(previous);
+    b = parseFloat(current);
+
+
+    switch(operator){
+    case '+':
+        result.value = a + b;
+        result.value = a + b;
+        break;
+    
+        case'-':
+            result.value = a - b;
+            break;
+        
+        case '*':
+            result.value = a * b;
+            break;
+
+        case '/':
+            result.value = a / b;
+            break;
+        default:
+            result.value = "Error";
+            break;        
+        }
+}
+function clearDisplay(){
+            result.value = "";
+            current = "";
+            previous = "";
+            operator = "";
+
+        }
+</script>
+</html>
