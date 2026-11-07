@@ -83,3 +83,5 @@ To calculate `5 + 3`:
 
 1. Save the code as `index.html`.
 2. Open the file in any web browser.
+3. <img width="202" height="200" alt="image" src="https://github.com/user-attachments/assets/da3c8aaa-f13e-4fa2-bd97-24f91767e3d3" />
+
