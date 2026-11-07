@@ -162,56 +162,127 @@
     </div>
 </body>
 <script>
-    let result = document.getElementById('display');
-let current = "";
-let previous = "";
-let operator = "";
+let display = document.getElementById('display');
+let current = "";          // the number being typed now
+let previous = "";         // the first number
+let operator = "";         // + - * /
+let justCalculated = false; // true right after pressing "="
 
-function appendNum(number){
-    current += number;
-    result.value += current;
+// Show the whole expression, e.g. "5 + 3"
+function updateDisplay() {
+    const symbols = { '+': '+', '-': '-', '*': 'x', '/': '/' };
+    let text = previous;
+    if (operator) text += " " + symbols[operator] + " ";
+    text += current;
+    display.value = text || "0";
 }
 
-function selectOperator(op){
-    previous = current;
+// Number or "." clicked
+function appendNum(num) {
+    // After "=", typing a number starts a new calculation
+    if (justCalculated) {
+        current = "";
+        justCalculated = false;
+    }
+
+    // Only one decimal point per number
+    if (num === '.') {
+        if (current.includes('.')) return;
+        if (current === "") current = "0";
+    }
+
+    // Avoid numbers like 007
+    if (current === "0" && num !== '.') {
+        current = num;
+    } else {
+        current += num;
+    }
+    updateDisplay();
+}
+
+// Operator clicked
+function selectOperator(op) {
+    if (current === "" && previous === "") return;   // nothing to operate on
+
+    // Only changed our mind about the operator (e.g. pressed + then -)
+    if (current === "" && previous !== "") {
+        operator = op;
+        updateDisplay();
+        return;
+    }
+
+    // Chain calculation: 5 + 3 then + => calculate 8 first
+    if (previous !== "" && operator !== "") {
+        const value = compute(parseFloat(previous), parseFloat(current), operator);
+        if (value === "Error") return showError();
+        previous = String(value);
+    } else {
+        previous = current;
+    }
+
     current = "";
     operator = op;
-    result.value += op;
+    justCalculated = false;
+    updateDisplay();
 }
 
-function calculate(){
-    a = parseFloat(previous);
-    b = parseFloat(current);
-
-
-    switch(operator){
-    case '+':
-        result.value = a + b;
-        result.value = a + b;
-        break;
-    
-        case'-':
-            result.value = a - b;
-            break;
-        
-        case '*':
-            result.value = a * b;
-            break;
-
+// Do the math
+function compute(a, b, op) {
+    let value;
+    switch (op) {
+        case '+': value = a + b; break;
+        case '-': value = a - b; break;
+        case '*': value = a * b; break;
         case '/':
-            result.value = a / b;
+            if (b === 0) return "Error";   // cannot divide by zero
+            value = a / b;
             break;
-        default:
-            result.value = "Error";
-            break;        
-        }
+        default: return "Error";
+    }
+    // Fix tiny errors like 0.1 + 0.2 = 0.30000000000000004
+    return parseFloat(value.toFixed(10));
 }
-function clearDisplay(){
-            result.value = "";
-            current = "";
-            previous = "";
-            operator = "";
 
-        }
+// "=" clicked
+function calculate() {
+    if (previous === "" || current === "" || operator === "") return;
+
+    const value = compute(parseFloat(previous), parseFloat(current), operator);
+    if (value === "Error") return showError();
+
+    current = String(value);
+    previous = "";
+    operator = "";
+    justCalculated = true;
+    updateDisplay();
+}
+
+// +/- clicked: change the sign of the current number
+function toggleSign() {
+    if (current === "" || current === "0") return;
+    current = current.startsWith("-") ? current.slice(1) : "-" + current;
+    updateDisplay();
+}
+
+// % clicked: divide the current number by 100
+function percentage() {
+    if (current === "") return;
+    current = String(parseFloat(current) / 100);
+    updateDisplay();
+}
+
+// AC clicked: reset everything
+function clearDisplay() {
+    current = "";
+    previous = "";
+    operator = "";
+    justCalculated = false;
+    display.value = "0";
+}
+
+function showError() {
+    clearDisplay();
+    display.value = "Error";
+}
 </script>
 </html>
