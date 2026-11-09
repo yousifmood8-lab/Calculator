@@ -2,7 +2,7 @@
 
 A simple calculator built with HTML, CSS, and JavaScript. It runs in the browser and needs no libraries.
 
-Screenshot:
+Here Screenshot:
 
 <img width="202" height="200" alt="image" src="https://github.com/user-attachments/assets/da3c8aaa-f13e-4fa2-bd97-24f91767e3d3" />
 
